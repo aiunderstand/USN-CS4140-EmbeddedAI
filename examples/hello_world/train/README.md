@@ -27,10 +27,10 @@ Jupyter Notebook.
 
 <table class="tfo-notebook-buttons" align="left">
   <td>
-    <a target="_blank" href="https://colab.research.google.com/github/tensorflow/tensorflow/blob/master/tensorflow/lite/micro/examples/hello_world/train/train_hello_world_model.ipynb"><img src="https://www.tensorflow.org/images/colab_logo_32px.png" />Google Colaboratory</a>
+    <a target="_blank" href="https://colab.research.google.com/github/aiunderstand/USN-CS4140-EmbeddedAI/blob/main/examples/hello_world/train/train_hello_world_model.ipynb"><img src="https://www.tensorflow.org/images/colab_logo_32px.png" />Run in Google Colab</a>
   </td>
   <td>
-    <a target="_blank" href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/micro/examples/hello_world/train/train_hello_world_model.ipynb"><img src="https://www.tensorflow.org/images/GitHub-Mark-32px.png" />Jupyter Notebook</a>
+    <a target="_blank" href="https://github.com/aiunderstand/USN-CS4140-EmbeddedAI/blob/main/examples/hello_world/train/train_hello_world_model.ipynb"><img src="https://www.tensorflow.org/images/GitHub-Mark-32px.png" />View source on GitHub</a>
   </td>
 </table>
 

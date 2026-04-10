@@ -12,7 +12,3 @@ Design choice: choose pins from P1 and avoid P1.11 since used for microphone. No
 | VCC         | 3.3V            | Power        |
 | GND         | GND             | Ground       |
 | LED/BL      | 3.3V            | Backlight    |
-
-```sh
-
-```

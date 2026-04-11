@@ -1,35 +1,46 @@
+/* uart30 and spi30 share the same address block (0x104000).
+ * Disable uart30 so spi30 (domain-30, gpiote30) can use P0.00–P0.03. */
+&uart30 {
+	status = "disabled";
+};
+
+/* spi22 is unused — free its pins for the camera project */
+&spi22 {
+	status = "disabled";
+};
+
 &pinctrl {
-	spi22_default: spi22_default {
+	spi30_default: spi30_default {
 		group1 {
-			psels = <NRF_PSEL(SPIM_SCK, 1, 13)>,
-				<NRF_PSEL(SPIM_MOSI, 1, 14)>;
+			psels = <NRF_PSEL(SPIM_SCK, 0, 0)>,   /* P0.00 */
+				<NRF_PSEL(SPIM_MOSI, 0, 1)>;   /* P0.01 */
 		};
 	};
 
-	spi22_sleep: spi22_sleep {
+	spi30_sleep: spi30_sleep {
 		group1 {
-			psels = <NRF_PSEL(SPIM_SCK, 1, 13)>,
-				<NRF_PSEL(SPIM_MOSI, 1, 14)>;
+			psels = <NRF_PSEL(SPIM_SCK, 0, 0)>,
+				<NRF_PSEL(SPIM_MOSI, 0, 1)>;
 			low-power-enable;
 		};
 	};
 };
 
-&spi22 {
+&spi30 {
 	compatible = "nordic,nrf-spim";
 	status = "okay";
-	pinctrl-0 = <&spi22_default>;
-	pinctrl-1 = <&spi22_sleep>;
+	pinctrl-0 = <&spi30_default>;
+	pinctrl-1 = <&spi30_sleep>;
 	pinctrl-names = "default", "sleep";
-	cs-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
+	cs-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;  /* P0.02 */
 };
 
 / {
 	mipi_dbi {
 		compatible = "zephyr,mipi-dbi-spi";
-		spi-dev = <&spi22>;
-		dc-gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-		reset-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
+		spi-dev = <&spi30>;
+		dc-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;   /* P0.03 */
+		/* RESET tied to 3.3V via 10 kΩ — no MCU pin needed */
 		write-only;
 		#address-cells = <1>;
 		#size-cells = <0>;

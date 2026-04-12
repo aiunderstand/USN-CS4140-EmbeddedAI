@@ -3,4 +3,4 @@ find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 
 project(tft-screen-1p8inch)
 
-target_sources(app PRIVATE src/main.c)
+target_sources(app PRIVATE src/main.c src/tft_display.c)

@@ -48,7 +48,7 @@ RESET is tied high in hardware — no MCU pin required.
 | OV7670 | SIOD | P1.11 | I2C | SCCB data — 4.7 kΩ pull-up to 3.3 V *(Arduino SDA, i2c21)* |
 | OV7670 | SIOC | P1.12 | I2C | SCCB clock — 4.7 kΩ pull-up to 3.3 V *(Arduino SCL, i2c21)* |
 | AL422B | RRST | P1.14 | Output | FIFO read-pointer reset (active low); shared with LED3 |
-| LM393 | OUT | P1.15 | Input | Digital comparator output |
+| LM393 | OUT | P1.13 | Input | Digital comparator output (sampled using ADC so could be analog mic); shared with Button0 |
 
 > **P1.04–P1.07** reserved for console UART (uart20) — do not use.
 > **P1.00/P1.01** are not wired to any expansion header on PCA10156.
@@ -58,9 +58,9 @@ RESET is tied high in hardware — no MCU pin required.
 
 | LM393 Pin | Connection |
 |---|---|
-| VCC | VDD pin on P1 header (far left) |
-| GND | GND pin on P1 header (pin above VDD) |
-| OUT | P1.15 (see Port 1 table above) |
+| VCC | VDD pin on P1 header |
+| GND | GND pin on P1 header |
+| OUT | P1.13 (see Port 1 table above) |
 
 ### Port 2 — Camera Data Bus and Timing
 
@@ -102,10 +102,10 @@ Moving the data bus from P1.08/09/10/13 → P2.00–P2.07 freed all buttons and 
 
 | Resource | Pin | Notes |
 |---|---|---|
-| Button0 (SW0) | P1.13 | Active low, internal pull-up |
 | Button1 (SW1) | P1.09 | Active low, internal pull-up |
 | Button2 (SW2) | P1.08 | Active low, internal pull-up |
 | LED1 | P1.10 | Active high; also PWM20-capable |
+| *(Button0/LM393)* | *P1.13* | *Shared with LM393 microphone* |
 | *(Button3/WEN)* | *P0.04* | *Shared with camera WEN — active-low output during capture* |
 | *(LED0/RCK)* | *P2.09* | *Shared with FIFO read clock — blinks during readout* |
 | *(LED2/D6)* | *P2.06* | *Shared with camera D6 — unavailable* |

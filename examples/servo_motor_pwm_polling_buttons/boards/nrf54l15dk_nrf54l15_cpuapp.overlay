@@ -1,0 +1,2 @@
+/* No overlay needed — pwm20 is already enabled and routed to P1.10
+ * by the board's common DTS (nrf54l15dk_common.dtsi). */

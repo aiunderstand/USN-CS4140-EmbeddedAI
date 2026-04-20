@@ -23,7 +23,7 @@ static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 int main(void)
 {
 	int ret;
-	bool led_state = true;
+	bool led_state;
 
 	if (!gpio_is_ready_dt(&led)) {
 		return 0;
@@ -40,7 +40,7 @@ int main(void)
 			return 0;
 		}
 
-		led_state = !led_state;
+		led_state = gpio_pin_get_dt(&led);
 		printf("LED state: %s\n", led_state ? "ON" : "OFF");
 		k_msleep(SLEEP_TIME_MS);
 	}

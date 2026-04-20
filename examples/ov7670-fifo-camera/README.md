@@ -22,33 +22,39 @@ P0.00–P0.03 are available because `uart30` is disabled in this build and the
 camera data bus is on Port 2 (QSPI flash disconnected via Board Configurator).
 RESET is tied high in hardware — no MCU pin required.
 
+> When the connection says "3.3 V" - connect to an available VDD:IO pin.
+> When connecting the camera, all camera pins except HREF and STR should end up connected. Read *all* the tables below.
+
 | Display Pin | nRF54L15 DK Pin | Function | Notes |
 |---|---|---|---|
 | SCK | P0.00 | SPI Clock | uart30 disabled — dedicated to TFT |
 | SDA/MOSI | P0.01 | SPI Data | uart30 disabled — dedicated to TFT |
 | CS | P0.02 | Chip Select | uart30 disabled — dedicated to TFT |
 | DC/A0 | P0.03 | Data/Command | uart30 disabled — dedicated to TFT |
-| RESET | 3.3 V via 10 kΩ | Hardware reset | no MCU pin needed — tie high |
+| RESET | 3.3 V via 10 kΩ | Hardware reset | no MCU pin needed — tie high. (The 10 kΩ resistor is not required - connect directly to a 3.3 V pin)  |
 | VCC | 3.3 V | Power | |
 | GND | GND | Ground | |
 | LED/BL | 3.3 V | Backlight | |
 
 | Camera Signal | nRF54L15 DK Pin | Direction | Notes |
 |---|---|---|---|
-| AL422B WEN | P0.04 | Output | FIFO write enable (active low); shared with Button3 |
+| AL422B WEN (WR) | P0.04 | Output | FIFO write enable (active low); shared with Button3 |
 
 > To use hardware SPI for the display, add `SPIM30` to the overlay (the SPIM30
 > peripheral shares the uart30 address block, which is disabled). Bit-banged GPIO
 > also works on these pins.
 
+> For the pull-up - use for example a bread board to connect the two pins together with a connection to 3.3 V through a 4.7k resistor.
+> See for example [the two top connections in this circuit](https://hades.mech.northwestern.edu/index.php/I2C_communication_between_PICs#Circuit).
+
 ### Port 1 — Camera I2C, FIFO control and sensors
 
 | Module | Signal | nRF54L15 DK Pin | Direction | Notes |
 |---|---|---|---|---|
-| OV7670 | SIOD | P1.11 | I2C | SCCB data — 4.7 kΩ pull-up to 3.3 V *(Arduino SDA, i2c21)* |
-| OV7670 | SIOC | P1.12 | I2C | SCCB clock — 4.7 kΩ pull-up to 3.3 V *(Arduino SCL, i2c21)* |
-| AL422B | RRST | P1.14 | Output | FIFO read-pointer reset (active low); shared with LED3 |
-| LM393 | OUT | P1.13 | Input | Digital comparator output (sampled using ADC so could be analog mic); shared with Button0 |
+| OV7670 (Camera) | SIOD | P1.11 | I2C | SCCB data — 4.7 kΩ pull-up to 3.3 V *(Arduino SDA, i2c21)* |
+| OV7670 (Camera) | SIOC | P1.12 | I2C | SCCB clock — 4.7 kΩ pull-up to 3.3 V *(Arduino SCL, i2c21)* |
+| AL422B (Camera) | RRST | P1.14 | Output | FIFO read-pointer reset (active low); shared with LED3 |
+| LM393 (Microphone) | OUT | P1.13 | Input | Digital comparator output (sampled using ADC so could be analog mic); shared with Button0 |
 
 > **P1.04–P1.07** reserved for console UART (uart20) — do not use.
 > **P1.00/P1.01** are not wired to any expansion header on PCA10156.
@@ -60,12 +66,12 @@ RESET is tied high in hardware — no MCU pin required.
 |---|---|
 | VCC | VDD pin on P1 header |
 | GND | GND pin on P1 header |
-| OUT | P1.13 (see Port 1 table above) |
+| OUT | P1.13 (see Port 1 table above) *(P1.13 also drives Button0 — sounds may result in flickering button presses)* |
 
 ### Port 2 — Camera Data Bus and Timing
 
 > **Board Configurator required:** P2.00–P2.05 are routed to the on-board QSPI flash
-> by default. Use the [Nordic Board Configurator](https://docs.nordicsemi.com/bundle/ug_nrf54l15_dk/page/UG/nRF54L15_DK/hw_desription/board_ctrl_app.html)
+> by default. Use the [Nordic Board Configurator](https://docs.nordicsemi.com/bundle/swtools_docs/page/app/pc-nrfconnect-board-configurator/index.html)
 > to disconnect the flash and expose those pins on the expansion header. The `spi00`
 > peripheral is also disabled in `boards/nrf54l15dk_nrf54l15_cpuapp.overlay`.
 
@@ -87,9 +93,9 @@ RESET is tied high in hardware — no MCU pin required.
 
 | Module Label | Connection | Notes |
 |---|---|---|
-| XCLK | 12 MHz oscillator on PCB | No MCU connection required |
+| XCLK | 12 MHz oscillator on PCB | No MCU connection required (There is no such pin)|
 | OE | GND | FIFO output always enabled (active low) |
-| RST | 3.3 V via 10 kΩ resistor | Keep camera out of reset |
+| RST | 3.3 V via 10 kΩ resistor | Keep camera out of reset (The 10 kΩ resistor is not required)|
 | PWDN | GND | Camera always powered on |
 | HREF | — | Not connected (unused in FIFO capture mode) |
 | STR | — | Not connected |
@@ -179,3 +185,6 @@ ov7670-fifo-camera/
   capacitance enough to corrupt SCCB register writes at 100 kHz. The OV7670 silently
   accepts the garbled writes and runs unconfigured, producing repetitive output that
   looks identical to stuck FIFO data.
+- Use `nrf54l15dk/nrf54l15/cpuapp` as build configuration - the samples may not
+  necessarily compile if you use `nrf54l15dk/nrf54l15/cpuapp/ns`.
+- If you run out of 3.3 V pins - be creative using a bread board or similar.

@@ -49,10 +49,10 @@ int main(void)
 			printk("ADC read error (%d)\n", err);
 		} else {
 			int32_t val_mv = (int32_t)buf;
-			printk("raw: %d", val_mv);
+			printk("raw: %4d", val_mv);
 			/* Convert the raw ADC value to millivolts using the channel config */
 			if (adc_raw_to_millivolts_dt(&mic_channel, &val_mv) == 0) {
-				printk(" = %d mV", val_mv);
+				printk(" = %5d mV", val_mv);
 			}
 			printk("\n");
 		}
